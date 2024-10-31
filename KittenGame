@@ -1,0 +1,106 @@
+local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Turtle-Brand/Turtle-Lib/main/source.lua"))()
+local w = lib:Window("Kitten Game")
+
+w:Label("More", Color3.fromRGB(255, 0, 0))
+
+w:Button("System Chat FE by me", function()
+    local ScreenGui = Instance.new("ScreenGui")
+    local TextBox = Instance.new("TextBox")
+
+    ScreenGui.Parent = game.CoreGui
+
+    TextBox.Parent = ScreenGui
+    TextBox.Size = UDim2.new(0, 250, 0, 50)
+    TextBox.Position = UDim2.new(0, 10, 0, 50)
+    TextBox.Text = ""
+    TextBox.ClearTextOnFocus = false
+    TextBox.BackgroundTransparency = 0.6
+
+    TextBox.FocusLost:Connect(function(enterPressed)
+        if enterPressed then
+            local args = {
+                [1] = TextBox.Text
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ChatAnnouncement_Client"):FireServer(unpack(args))
+            TextBox.Text = ""
+        end
+    end)
+end)
+
+w:Label("Dolpin", Color3.fromRGB(255, 0, 0))
+
+w:Button("Stop Riding", function()
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("ReachedLand"):FireServer()
+end)
+
+w:Button("Riding Normal Dolphin", function()
+local args = {
+    [1] = CFrame.new(-88.55406188964844, 20.067283630371094, 110.55277252197266, -0.20561473071575165, -9.94988536007213e-09, 0.9786331653594971, 6.436981436763745e-08, 1, 2.369147900083135e-08, -0.9786330461502075, 6.7865741470996e-08, -0.20561474561691284),
+    [2] = "Dolphin"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("PlayerEnteredWater"):FireServer(unpack(args))
+end)
+
+w:Button("Riding Gold Dolphin", function()
+local args = {
+    [1] = CFrame.new(-88.55406188964844, 20.067283630371094, 110.55277252197266, -0.20561473071575165, -9.94988536007213e-09, 0.9786331653594971, 6.436981436763745e-08, 1, 2.369147900083135e-08, -0.9786330461502075, 6.7865741470996e-08, -0.20561474561691284),
+    [2] = "Dolphin_Gold"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("PlayerEnteredWater"):FireServer(unpack(args))
+end)
+
+w:Button("Riding Pink Dolphin", function()
+local args = {
+    [1] = CFrame.new(-88.55406188964844, 20.067283630371094, 110.55277252197266, -0.20561473071575165, -9.94988536007213e-09, 0.9786331653594971, 6.436981436763745e-08, 1, 2.369147900083135e-08, -0.9786330461502075, 6.7865741470996e-08, -0.20561474561691284),
+    [2] = "Dolphin_Pink"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("PlayerEnteredWater"):FireServer(unpack(args))
+end)
+
+w:Label("Teleport", Color3.fromRGB(255, 0, 0))
+
+w:Button("Tp lobby", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-14, 17, 78)
+end)
+
+w:Button("Tp Island (Vacation) ", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-183, 12, 373)
+end)
+
+w:Button("Obby (Tower)", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-234, 17, -256)
+end)
+
+w:Button("Red/Light Game", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(84, 12, -328)
+end)
+
+w:Label("Spam Sound", Color3.fromRGB(255, 0, 0))
+
+local isPlaying = false
+
+w:Toggle("Spam Sound (Meow)", false, function (bool)
+    isPlaying = bool
+    
+    if isPlaying then
+        while isPlaying do
+            local args = {
+                [1] = game:GetService("ReplicatedStorage"):WaitForChild("Animations"):WaitForChild("Emotes"):WaitForChild("Meow"):WaitForChild("Animation_Cat"):WaitForChild("meow")
+            }
+            
+            game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("PlaySound"):FireServer(unpack(args))
+            wait(0)
+        end
+    else
+        local stopArgs = {
+            [1] = game:GetService("ReplicatedStorage"):WaitForChild("Animations"):WaitForChild("Emotes"):WaitForChild("Meow"):WaitForChild("Animation_Cat"):WaitForChild("meow")
+        }
+
+        game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("StopSound"):FireServer(unpack(stopArgs))
+    end
+end)
+
+w:Label("Sorry, because there are too many\n functions, the new guis is long.😓\n give me another guis library!", Color3.fromRGB(255, 0, 0))
