@@ -1,227 +1,116 @@
-local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Turtle-Brand/Turtle-Lib/main/source.lua"))()
-local w = lib:Window("Kitten Game")
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local Window = OrionLib:MakeWindow({Name = "Kitten Game | ACE1991ACE", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Tab = Window:MakeTab({
+	Name = "Main Hack",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
 
-w:Label("More", Color3.fromRGB(255, 0, 0))
-
-w:Button("System Chat FE by me", function()
-    local ScreenGui = Instance.new("ScreenGui")
-    local TextBox = Instance.new("TextBox")
-
-    ScreenGui.Parent = game.CoreGui
-
-    TextBox.Parent = ScreenGui
-    TextBox.Size = UDim2.new(0, 250, 0, 50)
-    TextBox.Position = UDim2.new(0, 10, 0, 50)
-    TextBox.Text = ""
-    TextBox.ClearTextOnFocus = false
-    TextBox.BackgroundTransparency = 0.6
-
-    TextBox.FocusLost:Connect(function(enterPressed)
-        if enterPressed then
-            local args = {
-                [1] = TextBox.Text
-            }
-            game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ChatAnnouncement_Client"):FireServer(unpack(args))
-            TextBox.Text = ""
-        end
-    end)
-end)
-
-w:Label("Dolpin", Color3.fromRGB(255, 0, 0))
-
-w:Button("Stop Riding", function()
-game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("ReachedLand"):FireServer()
-end)
-
-w:Button("Riding Normal Dolphin", function()
-local args = {
-    [1] = CFrame.new(-88.55406188964844, 20.067283630371094, 110.55277252197266, -0.20561473071575165, -9.94988536007213e-09, 0.9786331653594971, 6.436981436763745e-08, 1, 2.369147900083135e-08, -0.9786330461502075, 6.7865741470996e-08, -0.20561474561691284),
-    [2] = "Dolphin"
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("PlayerEnteredWater"):FireServer(unpack(args))
-end)
-
-w:Button("Riding Gold Dolphin", function()
-local args = {
-    [1] = CFrame.new(-88.55406188964844, 20.067283630371094, 110.55277252197266, -0.20561473071575165, -9.94988536007213e-09, 0.9786331653594971, 6.436981436763745e-08, 1, 2.369147900083135e-08, -0.9786330461502075, 6.7865741470996e-08, -0.20561474561691284),
-    [2] = "Dolphin_Gold"
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("PlayerEnteredWater"):FireServer(unpack(args))
-end)
-
-w:Button("Riding Pink Dolphin", function()
-local args = {
-    [1] = CFrame.new(-88.55406188964844, 20.067283630371094, 110.55277252197266, -0.20561473071575165, -9.94988536007213e-09, 0.9786331653594971, 6.436981436763745e-08, 1, 2.369147900083135e-08, -0.9786330461502075, 6.7865741470996e-08, -0.20561474561691284),
-    [2] = "Dolphin_Pink"
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("PlayerEnteredWater"):FireServer(unpack(args))
-end)
-
-w:Label("Teleport", Color3.fromRGB(255, 0, 0))
-
-w:Button("Tp lobby", function()
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-14, 17, 78)
-end)
-
-w:Button("Tp Island (Vacation) ", function()
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-183, 12, 373)
-end)
-
-w:Button("Obby (Tower)", function()
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-234, 17, -256)
-end)
-
-w:Button("Red/Light Game", function()
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(84, 12, -328)
-end)
-
-w:Label("Spam Sound", Color3.fromRGB(255, 0, 0))
-
-local isPlaying = false
-
-w:Toggle("Spam Sound (Meow)", false, function (bool)
-    isPlaying = bool
-    
-    if isPlaying then
-        while isPlaying do
-            local args = {
-                [1] = game:GetService("ReplicatedStorage"):WaitForChild("Animations"):WaitForChild("Emotes"):WaitForChild("Meow"):WaitForChild("Animation_Cat"):WaitForChild("meow")
-            }
-            
-            game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("PlaySound"):FireServer(unpack(args))
-            wait(0)
-        end
-    else
-        local stopArgs = {
-            [1] = game:GetService("ReplicatedStorage"):WaitForChild("Animations"):WaitForChild("Emotes"):WaitForChild("Meow"):WaitForChild("Animation_Cat"):WaitForChild("meow")
-        }
-
-        game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("StopSound"):FireServer(unpack(stopArgs))
-    end
-end)
-
-w:Label("Sorry, because there are too many\n functions, the new guis is long.😓\n give me another guis library!", Color3.fromRGB(255, 0, 0))
-
--- Gui
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "MyGUI"
-ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui
-
-local Frame = Instance.new("Frame")
-Frame.Name = "MainFrame"
-Frame.Parent = ScreenGui
-Frame.Size = UDim2.new(0.5, 0, 0.5, 0)
-Frame.Position = UDim2.new(0.25, 0, 0.25, 0)
-Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-Frame.BorderSizePixel = 0
-Frame.ClipsDescendants = true
-
-local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 10)
-UICorner.Parent = Frame
-
-local Title = Instance.new("TextLabel")
-Title.Name = "Title"
-Title.Parent = Frame
-Title.Size = UDim2.new(1, 0, 0.1, 0)
-Title.Position = UDim2.new(0, 0, 0, 0)
-Title.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-Title.Text = "Kitten Game 🐾"
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextScaled = true
-Title.TextStrokeTransparency = 0.8
-
-local TopCornersFrame = Instance.new("Frame")
-TopCornersFrame.Name = "TopCornersFrame"
-TopCornersFrame.Parent = Title
-TopCornersFrame.Size = UDim2.new(1, 0, 1, 0)
-TopCornersFrame.BackgroundColor3 = Title.BackgroundColor3
-TopCornersFrame.BorderSizePixel = 0
-TopCornersFrame.BackgroundTransparency = 1
-
-local UICornerTop = Instance.new("UICorner")
-UICornerTop.CornerRadius = UDim.new(0, 10)
-UICornerTop.Parent = TopCornersFrame
-
-local CloseButton = Instance.new("TextButton")
-CloseButton.Name = "CloseButton"
-CloseButton.Parent = Frame
-CloseButton.Size = UDim2.new(0.1, 0, 0.1, 0)
-CloseButton.Position = UDim2.new(0.9, 0, 0, 0)
-CloseButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-CloseButton.Text = "❌"
-CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-CloseButton.TextScaled = true
-
-local UICornerButton = Instance.new("UICorner")
-UICornerButton.CornerRadius = UDim.new(0, 10)
-UICornerButton.Parent = CloseButton
-
-local InfoLabel = Instance.new("TextLabel")
-InfoLabel.Name = "InfoLabel"
-InfoLabel.Parent = Frame
-InfoLabel.Size = UDim2.new(1, 0, 0.9, 0)
-InfoLabel.Position = UDim2.new(0, 0, 0.1, 0)
-InfoLabel.BackgroundTransparency = 1
-InfoLabel.Text = "..."
-InfoLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-InfoLabel.TextScaled = true
-InfoLabel.TextSize = 5
-
-local DontShowAgainFrame = Instance.new("Frame")
-DontShowAgainFrame.Name = "DontShowAgainFrame"
-DontShowAgainFrame.Parent = Frame
-DontShowAgainFrame.Size = UDim2.new(1, 0, 0.1, 0)
-DontShowAgainFrame.Position = UDim2.new(0, 0, 0.9, 0)
-DontShowAgainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-
-local UICornerDontShowAgain = Instance.new("UICorner")
-UICornerDontShowAgain.CornerRadius = UDim.new(0, 10)
-UICornerDontShowAgain.Parent = DontShowAgainFrame
-
-local YesButton = Instance.new("TextButton")
-YesButton.Name = "YesButton"
-YesButton.Parent = DontShowAgainFrame
-YesButton.Size = UDim2.new(0.5, 0, 1, 0)
-YesButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-YesButton.Text = "Dont Show Again (One tap)"
-YesButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-YesButton.TextScaled = true
-
-local UICornerYes = Instance.new("UICorner")
-UICornerYes.CornerRadius = UDim.new(0, 10)
-UICornerYes.Parent = YesButton
-
-local UICornerNo = Instance.new("UICorner")
-UICornerNo.CornerRadius = UDim.new(0, 10)
-UICornerNo.Parent = NoButton
-
-Frame.Position = UDim2.new(0.25, 0, 1, 0)
-Frame:TweenPosition(UDim2.new(0.25, 0, 0.25, 0), "Out", "Quad", 0.5)
-
-CloseButton.MouseButton1Click:Connect(function()
-    Frame:TweenPosition(UDim2.new(0.25, 0, 1, 0), "Out", "Quad", 0.5)
-    wait(0.5)
-    ScreenGui:Destroy()
-end)
-
-YesButton.MouseButton1Click:Connect(function()
-    writefile("kitten.txt", "1")
-    CloseButton:MouseButton1Click()
-end)
-
-Frame.AncestryChanged:Connect(function()
-    if not Frame:IsDescendantOf(ScreenGui) then
-        ScreenGui:Destroy()
-    end
-end)
-
-if isfile("kitten.txt") then
-    local value = readfile("kitten.txt")
-    if value == "1" then
-        ScreenGui:Destroy()
-    end
+Tab:AddButton({
+	Name = "Stop riding",
+	Callback = function()	game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("ReachedLand"):FireServer()
 end
+})
+Tab:AddDropdown({
+    Name = "Choose Dolphin",
+    Default = "none",
+    Options = {"Riding Normal Dolphin", "Riding Gold Dolphin", "Riding Pink Dolphin"},
+    Callback = function(Value)
+        if Value == "Riding Normal Dolphin" then
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("ReachedLand"):FireServer()
+
+            local args = {
+                [1] = CFrame.new(-88.55406188964844, 20.067283630371094, 110.55277252197266, -0.20561473071575165, -9.94988536007213e-09, 0.9786331653594971, 6.436981436763745e-08, 1, 2.369147900083135e-08, -0.9786330461502075, 6.7865741470996e-08, -0.20561474561691284),
+                [2] = "Dolphin"
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("PlayerEnteredWater"):FireServer(unpack(args))
+        elseif Value == "Riding Gold Dolphin" then
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("ReachedLand"):FireServer()
+
+            local args = {
+                [1] = CFrame.new(-88.55406188964844, 20.067283630371094, 110.55277252197266, -0.20561473071575165, -9.94988536007213e-09, 0.9786331653594971, 6.436981436763745e-08, 1, 2.369147900083135e-08, -0.9786330461502075, 6.7865741470996e-08, -0.20561474561691284),
+                [2] = "Dolphin_Gold"
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("PlayerEnteredWater"):FireServer(unpack(args))
+        elseif Value == "Riding Pink Dolphin" then
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("ReachedLand"):FireServer()
+
+            local args = {
+                [1] = CFrame.new(-88.55406188964844, 20.067283630371094, 110.55277252197266, -0.20561473071575165, -9.94988536007213e-09, 0.9786331653594971, 6.436981436763745e-08, 1, 2.369147900083135e-08, -0.9786330461502075, 6.7865741470996e-08, -0.20561474561691284),
+                [2] = "Dolphin_Pink"
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("PlayerEnteredWater"):FireServer(unpack(args))
+        end
+    end    
+})
+local isRunning = false
+
+Tab:AddToggle({
+    Name = "Spam Meow (Sound)",
+    Default = false,
+    Callback = function(Value)
+        isRunning = Value
+        if Value then
+            while isRunning do
+                local args = {
+                    [1] = game:GetService("ReplicatedStorage"):WaitForChild("Animations"):WaitForChild("Emotes"):WaitForChild("Meow"):WaitForChild("Animation_Cat"):WaitForChild("meow")
+                }
+                game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("PlaySound"):FireServer(unpack(args))
+                wait()
+            end
+        end
+    end    
+})
+Tab:AddTextbox({
+    Name = "[SERVER]: chat",
+    Default = "",
+    TextDisappear = false,
+    Callback = function(Value)
+        local args = {
+            [1] = Value
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ChatAnnouncement_Client"):FireServer(unpack(args))
+    end
+})
+local Tab = Window:MakeTab({
+	Name = "Teleport",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+Tab:AddButton({
+	Name = "Lobby",
+	Callback = function()
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-14, 17, 78)
+  	end    
+})
+Tab:AddButton({
+	Name = "Island (Vacation)",
+	Callback = function()
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-183, 12, 373)
+  	end    
+})
+Tab:AddButton({
+	Name = "Obby (Tower)",
+	Callback = function()
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-234, 17, -256)
+  	end    
+})
+Tab:AddButton({
+	Name = "Red / Light Game",
+	Callback = function()
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(84, 12, -328)
+  	end    
+})
+Tab:AddButton({
+	Name = "idk",
+	Callback = function()
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(94, 21, 447)
+  	end    
+})
+Tab:AddButton({
+	Name = "Backroom",
+	Callback = function()
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1857, -139, 5)
+  	end    
+})
+OrionLib:Init()
