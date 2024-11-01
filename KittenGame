@@ -9,6 +9,14 @@ local Tab = Window:MakeTab({
 Tab:AddButton({
 	Name = "Stop riding",
 	Callback = function()	game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SurfEvents"):WaitForChild("ReachedLand"):FireServer()
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+for _, animationTrack in pairs(humanoid:GetPlayingAnimationTracks()) do
+    animationTrack:Stop(0)
+end
 end
 })
 Tab:AddDropdown({
@@ -62,7 +70,7 @@ Tab:AddToggle({
     end    
 })
 Tab:AddTextbox({
-    Name = "[SERVER]: chat",
+    Name = "[SERVER] Chat (Bad word support)",
     Default = "",
     TextDisappear = false,
     Callback = function(Value)
@@ -70,6 +78,67 @@ Tab:AddTextbox({
             [1] = Value
         }
         game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ChatAnnouncement_Client"):FireServer(unpack(args))
+    end
+})
+local selectedColor = "None"
+
+Tab:AddDropdown({
+    Name = "Choose Laser Color",
+    Default = "None",
+    Options = {"To operate, please do not use laser when \nselecting color, once selected color then use", "Red", "Green", "Blue", "Yellow", "Purple", "Cyan", "Orange", "Pink", "White"},
+    Callback = function(Value)
+        selectedColor = Value
+        local colorMap = {
+            ["Red"] = Color3.new(1, 0, 0),
+            ["Green"] = Color3.new(0, 1, 0),
+            ["Blue"] = Color3.new(0, 0, 1),
+            ["Yellow"] = Color3.new(1, 1, 0),
+            ["Purple"] = Color3.new(0.5, 0, 0.5),
+            ["Cyan"] = Color3.new(0, 1, 1),
+            ["Orange"] = Color3.new(1, 0.5, 0),
+            ["Pink"] = Color3.new(1, 0.4, 0.7),
+            ["White"] = Color3.new(1, 1, 1)
+        }
+        if selectedColor ~= "None" then
+            local args = {
+                [1] = game.Players.LocalPlayer.Name,
+                [2] = Vector3.new(0, 0, 0),
+                [3] = colorMap[selectedColor]
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("LaserPointerEvents"):WaitForChild("CreateLaserDot"):FireServer(unpack(args))
+        end
+    end
+})
+local customName1 = ""
+local customName2 = ""
+
+Tab:AddTextbox({
+    Name = "Name",
+    Default = "",
+    TextDisappear = true,
+    Callback = function(Value)
+        customName1 = Value
+    end
+})
+
+Tab:AddTextbox({
+    Name = "Describe",
+    Default = "",
+    TextDisappear = true,
+    Callback = function(Value)
+        customName2 = Value
+    end
+})
+
+Tab:AddButton({
+    Name = "Apply Name",
+    Callback = function()
+        local args = {
+            [1] = customName1,
+            [2] = customName2
+        }
+
+        game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ChangeName"):FireServer(unpack(args))
     end
 })
 local Tab = Window:MakeTab({
