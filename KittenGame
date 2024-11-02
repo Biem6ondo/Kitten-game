@@ -1,3 +1,77 @@
+local ScreenGui = Instance.new("ScreenGui")
+local DraggableButton = Instance.new("TextButton")
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+ScreenGui.Parent = game.CoreGui
+
+DraggableButton.Parent = ScreenGui
+DraggableButton.BackgroundColor3 = Color3.new(0, 0, 0)
+DraggableButton.Size = UDim2.new(0, 100, 0, 50)
+DraggableButton.Position = UDim2.new(0, 0, 0, 0)
+DraggableButton.Text = "Toggle"
+DraggableButton.TextColor3 = Color3.new(1, 1, 1)
+DraggableButton.BorderSizePixel = 0
+DraggableButton.Font = Enum.Font.SourceSans
+DraggableButton.TextSize = 24
+DraggableButton.AutoButtonColor = false
+
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 10)
+UICorner.Parent = DraggableButton
+
+local dragging = false
+local dragInput
+local dragStart
+local startPos
+local holdStart = 0
+
+local function update(input)
+    local delta = input.Position - dragStart
+    DraggableButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+DraggableButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = DraggableButton.Position
+        holdStart = tick()
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+DraggableButton.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and input == dragInput then
+        update(input)
+    end
+end)
+
+DraggableButton.MouseButton1Click:Connect(function()
+    local coreGui = game.CoreGui:FindFirstChild("Orion")
+    if coreGui then
+        coreGui.Enabled = not coreGui.Enabled
+    end
+end)
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    if dragging and (tick() - holdStart) >= 5 then
+        DraggableButton.Visible = false
+    end
+end)
+-- Gui here
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = OrionLib:MakeWindow({Name = "Kitten Game | ACE1991ACE", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
 local Tab = Window:MakeTab({
@@ -147,31 +221,31 @@ local Tab = Window:MakeTab({
 	PremiumOnly = false
 })
 Tab:AddButton({
-	Name = "Lobby",
+	Name = "Mansion",
 	Callback = function()
       		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-14, 17, 78)
   	end    
 })
 Tab:AddButton({
-	Name = "Island (Vacation)",
+	Name = "Food island",
 	Callback = function()
       		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-183, 12, 373)
   	end    
 })
 Tab:AddButton({
-	Name = "Obby (Tower)",
+	Name = "Magic island",
 	Callback = function()
       		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-234, 17, -256)
   	end    
 })
 Tab:AddButton({
-	Name = "Red / Light Game",
+	Name = "Evil Cat",
 	Callback = function()
       		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(84, 12, -328)
   	end    
 })
 Tab:AddButton({
-	Name = "idk",
+	Name = "Waterfall island",
 	Callback = function()
       		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(94, 21, 447)
   	end    
@@ -180,6 +254,267 @@ Tab:AddButton({
 	Name = "Backroom",
 	Callback = function()
       		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1857, -139, 5)
+  	end    
+})
+local Tab = Window:MakeTab({
+	Name = "Auto Farm",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local targetPosition = Vector3.new(-235, 289, -308)
+local isTeleportEnabled = false
+local teleportCoroutine
+
+local function teleport()
+    character:SetPrimaryPartCFrame(CFrame.new(targetPosition))
+end
+
+local function teleportLoop()
+    while isTeleportEnabled do
+        teleport()
+        wait(30)
+    end
+end
+
+local function holdKey()
+    local VirtualInputManager = game:GetService("VirtualInputManager")
+    local keyToHold = Enum.KeyCode.E
+
+    while isTeleportEnabled do
+        VirtualInputManager:SendKeyEvent(true, keyToHold, false, nil)
+        wait()
+    end
+end
+
+Tab:AddToggle({
+    Name = "Tower Farm (BETA)\nWait 30sec",
+    Default = false,
+    Callback = function(Value)
+        isTeleportEnabled = Value
+        if isTeleportEnabled then
+            teleportCoroutine = coroutine.create(teleportLoop)
+            coroutine.resume(teleportCoroutine)
+            holdKey()
+        else
+            if teleportCoroutine then
+                isTeleportEnabled = false
+            end
+        end
+    end
+})
+local Tab = Window:MakeTab({
+	Name = "Audio",
+	Icon = "rbxassetid://10491133376",
+	PremiumOnly = false
+})
+Tab:AddButton({
+	Name = "Lobby",
+	Callback = function()
+      		local args = {
+    [1] = "General"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("UpdateMusicRegion"):FireServer(unpack(args))
+
+  	end    
+})
+Tab:AddButton({
+	Name = "Party",
+	Callback = function()
+      		local args = {
+    [1] = "PartyRoom"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("UpdateMusicRegion"):FireServer(unpack(args))
+
+  	end    
+})
+Tab:AddButton({
+	Name = "Backroom",
+	Callback = function()
+      		local args = {
+    [1] = "Level0"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("UpdateMusicRegion"):FireServer(unpack(args))
+
+  	end    
+})
+local Tab = Window:MakeTab({
+	Name = "Get",
+	Icon = "rbxassetid://10491133376",
+	PremiumOnly = false
+})
+Tab:AddButton({
+	Name = "Shark Cat",
+	Callback = function()
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-2391, -244, -738)
+  	end    
+})
+Tab:AddButton({
+	Name = "Glitch Cat",
+	Callback = function()
+      		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-2401, -139, -116)
+  	end    
+})
+local Tab = Window:MakeTab({
+	Name = "Animation List (Cat)",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+Tab:AddButton({
+	Name = "Stop animation",
+	Callback = function()
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+for _, animationTrack in pairs(humanoid:GetPlayingAnimationTracks()) do
+    animationTrack:Stop(0)
+end
+  	end    
+})
+Tab:AddButton({
+	Name = "Dance?",
+	Callback = function()
+      		local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local animation = Instance.new("Animation")
+animation.AnimationId = "rbxassetid://13781860130"
+local animationTrack = humanoid:LoadAnimation(animation)
+
+animationTrack:Play()
+  	end    
+})
+Tab:AddButton({
+	Name = "Walk",
+	Callback = function()
+      		local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local animation = Instance.new("Animation")
+animation.AnimationId = "rbxassetid://13523069123"
+local animationTrack = humanoid:LoadAnimation(animation)
+
+animationTrack:Play()
+  	end    
+})
+Tab:AddButton({
+	Name = "Cluster your ears.",
+	Callback = function()
+      		local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local animation = Instance.new("Animation")
+animation.AnimationId = "rbxassetid://18122889704"
+local animationTrack = humanoid:LoadAnimation(animation)
+
+animationTrack:Play()
+  	end    
+})
+Tab:AddButton({
+	Name = "AerialFlip",
+	Callback = function()
+      		local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local animation = Instance.new("Animation")
+animation.AnimationId = "rbxassetid://13988137029"
+local animationTrack = humanoid:LoadAnimation(animation)
+
+animationTrack:Play()
+  	end    
+})
+Tab:AddButton({
+	Name = "Climb",
+	Callback = function()
+      		local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local animation = Instance.new("Animation")
+animation.AnimationId = "rbxassetid://13523540004"
+local animationTrack = humanoid:LoadAnimation(animation)
+
+animationTrack:Play()
+  	end    
+})
+Tab:AddButton({
+	Name = "Fall",
+	Callback = function()
+      		local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local animation = Instance.new("Animation")
+animation.AnimationId = "rbxassetid://14721751956"
+local animationTrack = humanoid:LoadAnimation(animation)
+
+animationTrack:Play()
+  	end    
+})
+Tab:AddButton({
+	Name = "idle (nothing lol)",
+	Callback = function()
+      		local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local animation = Instance.new("Animation")
+animation.AnimationId = "rbxassetid://13491665689"
+local animationTrack = humanoid:LoadAnimation(animation)
+
+animationTrack:Play()
+  	end    
+})
+Tab:AddButton({
+	Name = "Jump",
+	Callback = function()
+      		local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local animation = Instance.new("Animation")
+animation.AnimationId = "rbxassetid://14722433759"
+local animationTrack = humanoid:LoadAnimation(animation)
+
+animationTrack:Play()
+  	end    
+})
+Tab:AddButton({
+	Name = "Swim",
+	Callback = function()
+      		local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local animation = Instance.new("Animation")
+animation.AnimationId = "rbxassetid://13530452574"
+local animationTrack = humanoid:LoadAnimation(animation)
+
+animationTrack:Play()
+  	end    
+})
+Tab:AddButton({
+	Name = "Swim idle",
+	Callback = function()
+      		local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local animation = Instance.new("Animation")
+animation.AnimationId = "rbxassetid://13530393903"
+local animationTrack = humanoid:LoadAnimation(animation)
+
+animationTrack:Play()
   	end    
 })
 OrionLib:Init()
